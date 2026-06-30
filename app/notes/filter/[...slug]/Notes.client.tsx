@@ -14,10 +14,17 @@ import NoteForm from '@/components/NoteForm/NoteForm';
 
 import { fetchNotes } from '@/lib/api';
 
-const NotesClient = () => {
+interface NotesClientProps {
+  tag?: string;
+}
+
+const NotesClient = ({
+  tag,
+}: NotesClientProps) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] =
+    useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -44,8 +51,13 @@ const NotesClient = () => {
   );
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['notes', page, search],
-    queryFn: () => fetchNotes({ page, search }),
+    queryKey: ['notes', page, search, tag],
+    queryFn: () =>
+      fetchNotes({
+        page,
+        search,
+        tag,
+      }),
     placeholderData: keepPreviousData,
   });
 
